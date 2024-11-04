@@ -10,3 +10,10 @@ PagePartBundle
 --------------
 
 - Not passing a HasPagePartsInterface as second parameter in PagePartEvent is deprecated and will be required in 8.0.
+
+
+NodeBundle
+-----------------
+
+- The node-bundle/multidomain-bundle has now some improved logic in the router itself. Using the old router logic is deprecated and the new will be the default in 8.0.
+  To enable the new and improved router, set the `kunstmaan_node.enable_improved_router` config to `true`.

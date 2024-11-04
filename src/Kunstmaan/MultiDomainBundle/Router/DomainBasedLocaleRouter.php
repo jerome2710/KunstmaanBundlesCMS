@@ -9,10 +9,18 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
+use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
 class DomainBasedLocaleRouter extends SlugRouter
 {
+    /**
+     * @var RouteCollection
+     *
+     * @deprecated routeCollectionMultiLanguage property is deprecated in 7.2 and will be removed in 8.0. There is no replacement for this property.
+     */
+    protected $routeCollectionMultiLanguage;
+
     private ?array $otherSite = null;
     private array $cachedNodeTranslations = [];
 
@@ -148,6 +156,21 @@ class DomainBasedLocaleRouter extends SlugRouter
      */
     public function getRouteCollection(): RouteCollection
     {
+        if (!$this->enabledImprovedRouter) {
+            trigger_deprecation('kunstmaan/multidomain-bundle', '7.2', 'Not enabling the improved router is deprecated and the changed and improved router will be the default in 8.0. Set the "kunstmaan_multi_domain.enable_improved_domain_based_local_router" config to true.');
+
+            if (($this->otherSite && $this->isMultiLanguage($this->otherSite['host'])) || (!$this->otherSite && $this->isMultiLanguage())) {
+                if (!$this->routeCollectionMultiLanguage) {
+                    $this->routeCollectionMultiLanguage = new RouteCollection();
+
+                    $this->addMultiLangPreviewRoute();
+                    $this->addMultiLangSlugRoute();
+                }
+
+                return $this->routeCollectionMultiLanguage;
+            }
+        }
+
         if (!$this->routeCollection) {
             $this->routeCollection = new RouteCollection();
 
@@ -165,6 +188,45 @@ class DomainBasedLocaleRouter extends SlugRouter
     {
         $routeParameters = $this->getSlugRouteParameters();
         $this->addRoute('_slug', $routeParameters);
+    }
+
+    /**
+     * Add the slug route to the route collection
+     */
+    protected function addMultiLangPreviewRoute()
+    {
+        trigger_deprecation('kunstmaan/multidomain-bundle', '7.2', 'This method is deprecated and will be removed in 8.0.');
+
+        $routeParameters = $this->getPreviewRouteParameters();
+        $this->addMultiLangRoute('_slug_preview', $routeParameters);
+    }
+
+    /**
+     * Add the slug route to the route collection multilanguage
+     */
+    protected function addMultiLangSlugRoute()
+    {
+        trigger_deprecation('kunstmaan/multidomain-bundle', '7.2', 'This method is deprecated and will be removed in 8.0.');
+
+        $routeParameters = $this->getSlugRouteParameters();
+        $this->addMultiLangRoute('_slug', $routeParameters);
+    }
+
+    /**
+     * @param string $name
+     */
+    protected function addMultiLangRoute($name, array $parameters = [])
+    {
+        trigger_deprecation('kunstmaan/multidomain-bundle', '7.2', 'This method is deprecated and will be removed in 8.0.');
+
+        $this->routeCollectionMultiLanguage->add(
+            $name,
+            new Route(
+                $parameters['path'],
+                $parameters['defaults'],
+                $parameters['requirements']
+            )
+        );
     }
 
     /**
