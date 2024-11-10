@@ -157,7 +157,7 @@ class DomainBasedLocaleRouter extends SlugRouter
     public function getRouteCollection(): RouteCollection
     {
         if (!$this->enabledImprovedRouter) {
-            trigger_deprecation('kunstmaan/multidomain-bundle', '7.2', 'Not enabling the improved router is deprecated and the changed and improved router will be the default in 8.0. Set the "kunstmaan_multi_domain.enable_improved_domain_based_local_router" config to true.');
+            trigger_deprecation('kunstmaan/multidomain-bundle', '7.2', 'Not enabling the improved router is deprecated and the changed and improved router will be the default in 8.0. Set the "kunstmaan_node.enable_improved_router" config to true.');
 
             if (($this->otherSite && $this->isMultiLanguage($this->otherSite['host'])) || (!$this->otherSite && $this->isMultiLanguage())) {
                 if (!$this->routeCollectionMultiLanguage) {
