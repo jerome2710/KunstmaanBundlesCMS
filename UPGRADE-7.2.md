@@ -6,6 +6,11 @@ FormBundle
 
 - The frontendformobject view variable of form pagepart templates is deprecated and will be removed in 8.0. There is no replacement for this variable.
 
+GeneratorBundle
+---------------
+
+- All classes in the generator bundle are marked internal. If you are using or extending these classes, please be aware that they can change in any release.
+
 PagePartBundle
 --------------
 
